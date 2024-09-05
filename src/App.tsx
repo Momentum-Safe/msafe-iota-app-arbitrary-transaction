@@ -1,6 +1,6 @@
 import { Button, PageHeader, TextField, shortAddress } from '@msafe/msafe-ui';
-import { MSafeWallet } from '@msafe/sui-wallet';
-import { isSameAddress } from '@msafe/sui3-utils';
+import { MSafeWallet } from '@msafe/iota-wallet';
+import { isSameAddress } from '@msafe/iota-utils';
 import { CheckCircle } from '@mui/icons-material';
 import { Box, Container, Stack, Typography } from '@mui/material';
 import {
@@ -8,15 +8,15 @@ import {
   useCurrentAccount,
   useCurrentWallet,
   useDisconnectWallet,
-  useSuiClient,
-} from '@mysten/dapp-kit';
-import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { fromHEX } from '@mysten/sui.js/utils';
+  useIotaClient,
+} from '@iota/dapp-kit';
+import { TransactionBlock } from '@iota/iota-sdk/transactions';
+import { fromHEX } from '@iota/iota-sdk/utils';
 import { useSnackbar } from 'notistack';
 import { useEffect, useMemo, useState } from 'react';
 import { CopyBlock } from 'react-code-blocks';
-const code = `import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { toHEX } from '@mysten/sui.js/utils';
+const code = `import { TransactionBlock } from '@iota/iota-sdk/transactions';
+import { toHEX } from '@iota/iota-sdk/utils';
 
 const txb = new TransactionBlock();
 // Your build logic here
@@ -30,7 +30,7 @@ export default function App() {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const suiClient = useSuiClient();
+  const iotaClient = useIotaClient();
   const wallet = useCurrentWallet();
   const account = useCurrentAccount();
 
@@ -39,7 +39,7 @@ export default function App() {
 
   const connectWallet = () => {
     connect({
-      wallet: new MSafeWallet('msafe-plain-tx', suiClient, 'sui:testnet'),
+      wallet: new MSafeWallet('msafe-plain-tx', iotaClient, 'sui:testnet'),
       silent: true,
     });
   };
@@ -56,7 +56,7 @@ export default function App() {
     if (!feature) {
       return null;
     }
-    return feature.signAndExecuteTransactionBlock;
+    return (feature as any).signAndExecuteTransactionBlock;
   }, [wallet]);
 
   return (

@@ -1,8 +1,8 @@
 import { MavenProvider } from '@msafe/msafe-ui';
 import { CssBaseline } from '@mui/material';
-import { SuiClientProvider, WalletProvider } from '@mysten/dapp-kit';
-import '@mysten/dapp-kit/dist/index.css';
-import { SuiClient } from '@mysten/sui.js/client';
+import { IotaClientProvider, WalletProvider } from '@iota/dapp-kit';
+import '@iota/dapp-kit/dist/index.css';
+import { IotaClient } from '@iota/iota-sdk/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SnackbarProvider } from 'notistack';
 import * as React from 'react';
@@ -20,9 +20,9 @@ function Root() {
     <React.StrictMode>
       <MavenProvider>
         <QueryClientProvider client={queryClient}>
-          <SuiClientProvider
+          <IotaClientProvider
             createClient={() => {
-              return new SuiClient({ url: 'https://fullnode.mainnet.sui.io' });
+              return new IotaClient({ url: 'https://fullnode.mainnet.sui.io' });
             }}
           >
             <WalletProvider preferredWallets={['msafe']}>
@@ -43,7 +43,7 @@ function Root() {
                 </SnackbarProvider>
               </BrowserRouter>
             </WalletProvider>
-          </SuiClientProvider>
+          </IotaClientProvider>
         </QueryClientProvider>
       </MavenProvider>
     </React.StrictMode>
