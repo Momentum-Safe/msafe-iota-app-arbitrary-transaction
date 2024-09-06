@@ -22,7 +22,7 @@ function Root() {
         <QueryClientProvider client={queryClient}>
           <IotaClientProvider
             createClient={() => {
-              return new IotaClient({ url: 'https://fullnode.mainnet.sui.io' });
+              return new IotaClient({ url: 'https://api.iota-rebased-alphanet.iota.cafe/' });
             }}
           >
             <WalletProvider preferredWallets={['msafe']}>

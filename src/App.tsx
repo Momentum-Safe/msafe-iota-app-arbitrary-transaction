@@ -1,8 +1,3 @@
-import { Button, PageHeader, TextField, shortAddress } from '@msafe/msafe-ui';
-import { MSafeWallet } from '@msafe/iota-wallet';
-import { isSameAddress } from '@msafe/iota-utils';
-import { CheckCircle } from '@mui/icons-material';
-import { Box, Container, Stack, Typography } from '@mui/material';
 import {
   useConnectWallet,
   useCurrentAccount,
@@ -11,7 +6,12 @@ import {
   useIotaClient,
 } from '@iota/dapp-kit';
 import { TransactionBlock } from '@iota/iota-sdk/transactions';
-import { fromHEX } from '@iota/iota-sdk/utils';
+import { fromHEX, toHEX } from '@iota/iota-sdk/utils';
+import { SUI_COIN, buildCoinTransferTxb, isSameAddress } from '@msafe/iota-utils';
+import { MSafeWallet } from '@msafe/iota-wallet';
+import { Button, PageHeader, TextField, shortAddress } from '@msafe/msafe-ui';
+import { CheckCircle } from '@mui/icons-material';
+import { Box, Container, Stack, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useEffect, useMemo, useState } from 'react';
 import { CopyBlock } from 'react-code-blocks';
@@ -36,10 +36,11 @@ export default function App() {
 
   const [txContent, setTxContent] = useState('');
   const [proposing, setProposing] = useState(false);
+  const [generating, setGenerating] = useState(false);
 
   const connectWallet = () => {
     connect({
-      wallet: new MSafeWallet('msafe-plain-tx', iotaClient, 'sui:testnet'),
+      wallet: new MSafeWallet('msafe-plain-tx', iotaClient, 'iota:testnet'),
       silent: true,
     });
   };
@@ -52,7 +53,7 @@ export default function App() {
     if (!wallet.currentWallet) {
       return null;
     }
-    const feature = wallet.currentWallet.features['sui:signAndExecuteTransactionBlock'];
+    const feature = wallet.currentWallet.features['iota:signAndExecuteTransactionBlock'];
     if (!feature) {
       return null;
     }
@@ -94,6 +95,36 @@ export default function App() {
         />
         <Stack direction="row" spacing={1}>
           <Box flexGrow={1} />
+          <Button
+            variant="contained"
+            color="secondary"
+            disabled={!wallet.isConnected}
+            loading={generating}
+            onClick={() => {
+              if (account && account.address) {
+                setGenerating(true);
+                buildCoinTransferTxb(
+                  iotaClient,
+                  {
+                    amount: '10000000',
+                    coinType: SUI_COIN,
+                    recipient: '0x4cf6c787b4253e1e68b758b30bce0e62eba977eed20dcad5b2acec0b405124f7',
+                  },
+                  account.address,
+                )
+                  .then((tb) => {
+                    tb.build({ client: iotaClient })
+                      .then((res) => {
+                        setTxContent(toHEX(res));
+                      })
+                      .finally(() => setGenerating(false));
+                  })
+                  .catch(() => setGenerating(false));
+              }
+            }}
+          >
+            Generate Demo Payload
+          </Button>
           <Button
             variant="contained"
             color="primary"

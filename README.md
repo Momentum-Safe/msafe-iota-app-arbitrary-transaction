@@ -1,1 +1,1 @@
-# msafe-sui-arbitrary-transaction
+# msafe-iota-arbitrary-transaction
