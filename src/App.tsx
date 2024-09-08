@@ -32,8 +32,12 @@ export default function App() {
 
   const iotaClient = useIotaClient();
   const wallet = useCurrentWallet();
-  const account = useCurrentAccount();
-
+  const account = useMemo(() => {
+    if (wallet.currentWallet && wallet.currentWallet.accounts) {
+      return wallet.currentWallet.accounts[0]
+    }
+    return null
+  }, [wallet])
   const [txContent, setTxContent] = useState('');
   const [proposing, setProposing] = useState(false);
   const [generating, setGenerating] = useState(false);
