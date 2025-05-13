@@ -47,15 +47,15 @@ export default function App() {
     connectWallet();
   }, []);
 
-  const signAndExecuteTransactionBlock = useMemo(() => {
+  const signAndExecuteTransaction = useMemo(() => {
     if (!wallet.currentWallet) {
       return null;
     }
-    const feature = wallet.currentWallet.features['iota:signAndExecuteTransactionBlock'];
+    const feature = wallet.currentWallet.features['iota:signAndExecuteTransaction'];
     if (!feature) {
       return null;
     }
-    return (feature as any).signAndExecuteTransactionBlock;
+    return (feature as any).signAndExecuteTransaction;
   }, [wallet]);
 
   return (
@@ -106,7 +106,7 @@ export default function App() {
                   {
                     amount: '10000000',
                     coinType: SUI_COIN,
-                    recipient: '0x4cf6c787b4253e1e68b758b30bce0e62eba977eed20dcad5b2acec0b405124f7',
+                    recipient: '0x1ae9faeabb24d601107eccd7b6547d31847f141f673ed6587efec837ee0e6c64',
                   },
                   account.address,
                 )
@@ -131,24 +131,22 @@ export default function App() {
             onClick={async () => {
               try {
                 const transactionBlock = Transaction.from(fromHEX(txContent));
+                console.log('🚀 ~ onClick={ ~ transactionBlock:', account, signAndExecuteTransaction);
 
-                if (!account || !signAndExecuteTransactionBlock) {
+                if (!account || !signAndExecuteTransaction) {
                   throw new Error('No account information');
                 }
 
-                if (
-                  !transactionBlock.blockData.sender ||
-                  !isSameAddress(transactionBlock.blockData.sender, account.address)
-                ) {
+                const sender = transactionBlock.getData().sender;
+
+                if (!sender || !isSameAddress(sender, account.address)) {
                   throw new Error('Transaction sender is not same as the multisig address');
                 }
 
                 setProposing(true);
 
-                await signAndExecuteTransactionBlock({
-                  transactionBlock,
-                  account,
-                  chain: account.chains[0],
+                await signAndExecuteTransaction({
+                  transaction: transactionBlock,
                 });
               } catch (e) {
                 enqueueSnackbar(`Can't propose transaction: ${String(e)}`, { variant: 'error' });
