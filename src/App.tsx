@@ -1,11 +1,5 @@
-import {
-  useConnectWallet,
-  useCurrentAccount,
-  useCurrentWallet,
-  useDisconnectWallet,
-  useIotaClient,
-} from '@iota/dapp-kit';
-import { TransactionBlock } from '@iota/iota-sdk/transactions';
+import { useConnectWallet, useCurrentWallet, useDisconnectWallet, useIotaClient } from '@iota/dapp-kit';
+import { Transaction } from '@iota/iota-sdk/transactions';
 import { fromHEX, toHEX } from '@iota/iota-sdk/utils';
 import { SUI_COIN, buildCoinTransferTxb, isSameAddress } from '@msafe/iota-utils';
 import { MSafeWallet } from '@msafe/iota-wallet';
@@ -15,12 +9,12 @@ import { Box, Container, Stack, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useEffect, useMemo, useState } from 'react';
 import { CopyBlock } from 'react-code-blocks';
-const code = `import { TransactionBlock } from '@iota/iota-sdk/transactions';
+const code = `import { Transaction } from '@iota/iota-sdk/transactions';
 import { toHEX } from '@iota/iota-sdk/utils';
 
-const txb = new TransactionBlock();
+const tx = new Transaction();
 // Your build logic here
-const txBytes = txb.build();
+const txBytes = tx.build();
 // Copy below txHex content to input
 const txHex = toHEX(txBytes);`;
 
@@ -34,10 +28,10 @@ export default function App() {
   const wallet = useCurrentWallet();
   const account = useMemo(() => {
     if (wallet.currentWallet && wallet.currentWallet.accounts) {
-      return wallet.currentWallet.accounts[0]
+      return wallet.currentWallet.accounts[0];
     }
-    return null
-  }, [wallet])
+    return null;
+  }, [wallet]);
   const [txContent, setTxContent] = useState('');
   const [proposing, setProposing] = useState(false);
   const [generating, setGenerating] = useState(false);
@@ -136,7 +130,7 @@ export default function App() {
             loading={proposing}
             onClick={async () => {
               try {
-                const transactionBlock = TransactionBlock.from(fromHEX(txContent));
+                const transactionBlock = Transaction.from(fromHEX(txContent));
 
                 if (!account || !signAndExecuteTransactionBlock) {
                   throw new Error('No account information');

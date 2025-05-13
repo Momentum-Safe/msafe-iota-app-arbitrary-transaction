@@ -1,8 +1,8 @@
-import { MavenProvider } from '@msafe/msafe-ui';
-import { CssBaseline } from '@mui/material';
 import { IotaClientProvider, WalletProvider } from '@iota/dapp-kit';
 import '@iota/dapp-kit/dist/index.css';
-import { IotaClient } from '@iota/iota-sdk/client';
+import { getFullnodeUrl, IotaClient } from '@iota/iota-sdk/client';
+import { MavenProvider } from '@msafe/msafe-ui';
+import { CssBaseline } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SnackbarProvider } from 'notistack';
 import * as React from 'react';
@@ -22,7 +22,7 @@ function Root() {
         <QueryClientProvider client={queryClient}>
           <IotaClientProvider
             createClient={() => {
-              return new IotaClient({ url: 'https://api.iota-rebased-alphanet.iota.cafe/' });
+              return new IotaClient({ url: getFullnodeUrl('mainnet') });
             }}
           >
             <WalletProvider preferredWallets={['msafe']}>
