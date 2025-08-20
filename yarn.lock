@@ -1255,13 +1255,20 @@
   dependencies:
     bs58 "^6.0.0"
 
-"@iota/dapp-kit@^0.4.4":
-  version "0.4.4"
-  resolved "https://registry.npmjs.org/@iota/dapp-kit/-/dapp-kit-0.4.4.tgz#651fd667162d119e8db91dcbd3c30f2f451e0bc5"
-  integrity sha512-qphT4v1fIJjaT+dpGI9Sph7QxFSkiveq6RzT9U0kUs33RPjSOrxC35G0mysO7Tw4fdSOrcP3J0+IJ203hBh/rQ==
+"@iota/bcs@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@iota/bcs/-/bcs-1.2.0.tgz#ba04bda8c5e85ca2c95fc122adf580f98e1d5acd"
+  integrity sha512-QdRSR0KpJ87tdjVNmM/j0+0DvE0aTxHIa02337iluaOsMqtJ8OdgUCfSyLduC/3qS+8tJE+UB1KOw55tF+sN2w==
   dependencies:
-    "@iota/iota-sdk" "1.0.1"
-    "@iota/wallet-standard" "0.2.8"
+    bs58 "^6.0.0"
+
+"@iota/dapp-kit@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@iota/dapp-kit/-/dapp-kit-0.5.1.tgz#5db5e03db8c6137c80efe4ec415771b15e137754"
+  integrity sha512-oYjeWizKBhbsGVxnaeZiE3ceWXZfq+X2ta1B4rNKIZS1fFa5StOsYh+hjIti9o52oKUcIfXv3OwQrIXR7T0feQ==
+  dependencies:
+    "@iota/iota-sdk" "1.5.0"
+    "@iota/wallet-standard" "0.2.13"
     "@radix-ui/react-dialog" "^1.1.1"
     "@radix-ui/react-dropdown-menu" "^2.1.1"
     "@radix-ui/react-slot" "^1.1.0"
@@ -1271,7 +1278,7 @@
     clsx "^2.1.1"
     zustand "^4.4.1"
 
-"@iota/iota-sdk@1.0.1", "@iota/iota-sdk@^1.0.1":
+"@iota/iota-sdk@1.0.1":
   version "1.0.1"
   resolved "https://registry.npmjs.org/@iota/iota-sdk/-/iota-sdk-1.0.1.tgz#3054d6e44122e61a2336c26ad7670b9baa0a82c1"
   integrity sha512-1AYDlYB1re8EKwsIdl6pOAzYNHVxnaOY9hvh9S6zTEI0W6jQS+byS+xMVym5LS/7g1S3gcCpiEbPFuPN7Wd6xA==
@@ -1289,7 +1296,34 @@
     tweetnacl "^1.0.3"
     valibot "^0.36.0"
 
-"@iota/wallet-standard@0.2.8", "@iota/wallet-standard@^0.2.8":
+"@iota/iota-sdk@1.5.0", "@iota/iota-sdk@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@iota/iota-sdk/-/iota-sdk-1.5.0.tgz#dcd16bb226be89b3757d9b6a5dc60f809209213b"
+  integrity sha512-R5Tx78Z3ZMh+P7uAqN3U+JylfY+rbnnzjqEehef+bYatyddkh8uEr7S2l/0++Vrp56bpZnSdLTld1PvKKWyXaQ==
+  dependencies:
+    "@graphql-typed-document-node/core" "^3.2.0"
+    "@iota/bcs" "1.2.0"
+    "@noble/curves" "^1.4.2"
+    "@noble/hashes" "^1.4.0"
+    "@scure/bip32" "^1.4.0"
+    "@scure/bip39" "^1.3.0"
+    "@suchipi/femver" "^1.0.0"
+    bech32 "^2.0.0"
+    bignumber.js "^9.1.1"
+    gql.tada "^1.8.2"
+    graphql "^16.9.0"
+    tweetnacl "^1.0.3"
+    valibot "^0.36.0"
+
+"@iota/wallet-standard@0.2.13":
+  version "0.2.13"
+  resolved "https://registry.yarnpkg.com/@iota/wallet-standard/-/wallet-standard-0.2.13.tgz#281bc47d7cdd77104bca1f10ff0885f0933c8dd8"
+  integrity sha512-f24fVi2krNvzQajfr4obaxj1hgB8qq+0X6rD3v0ttcmFmOBz0P4TXqiXBR9DpnZ9SHWG9AzXKk0CyLZVdb60DA==
+  dependencies:
+    "@iota/iota-sdk" "1.5.0"
+    "@wallet-standard/core" "1.0.3"
+
+"@iota/wallet-standard@^0.2.8":
   version "0.2.8"
   resolved "https://registry.npmjs.org/@iota/wallet-standard/-/wallet-standard-0.2.8.tgz#8e9525fb0b8d0aba240d9266966029b4cb0ccc50"
   integrity sha512-WsC9IjQtKcUBLzqes4D9eJifaqKgYp2/A0IzwH+7ZPcLHtHivYjatML8u74MrRlPC9LrbjEGyg4Nbau/HIkTmA==
@@ -2938,7 +2972,7 @@ apexcharts@^3.42.0:
     svg.resize.js "^1.4.3"
     svg.select.js "^3.0.1"
 
-aptos@1.20.0, aptos@^1.20.0:
+aptos@^1.20.0:
   version "1.20.0"
   resolved "https://registry.yarnpkg.com/aptos/-/aptos-1.20.0.tgz#ef47a7c198ad61848336dc35f3d17417028e483a"
   integrity sha512-driZt7qEr4ndKqqVHMyuFsQAHy4gJ4HPQttgVIpeDfnOIEnIV7A2jyJ9EYO2A+MayuyxXB+7yCNXT4HyBFJdpA==

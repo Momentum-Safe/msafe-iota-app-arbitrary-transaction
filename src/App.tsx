@@ -1,6 +1,6 @@
 import { useConnectWallet, useCurrentWallet, useDisconnectWallet, useIotaClient } from '@iota/dapp-kit';
 import { Transaction } from '@iota/iota-sdk/transactions';
-import { fromHEX, toHEX } from '@iota/iota-sdk/utils';
+import { fromBase64, fromHex, toHex } from '@iota/iota-sdk/utils';
 import { SUI_COIN, buildCoinTransferTxb, isSameAddress } from '@msafe/iota-utils';
 import { MSafeWallet } from '@msafe/iota-wallet';
 import { Button, PageHeader, TextField, shortAddress } from '@msafe/msafe-ui';
@@ -10,13 +10,13 @@ import { useSnackbar } from 'notistack';
 import { useEffect, useMemo, useState } from 'react';
 import { CopyBlock } from 'react-code-blocks';
 const code = `import { Transaction } from '@iota/iota-sdk/transactions';
-import { toHEX } from '@iota/iota-sdk/utils';
+import { toHex } from '@iota/iota-sdk/utils';
 
 const tx = new Transaction();
 // Your build logic here
 const txBytes = tx.build();
 // Copy below txHex content to input
-const txHex = toHEX(txBytes);`;
+const txHex = toHex(txBytes);`;
 
 export default function App() {
   const { mutate: disconnect } = useDisconnectWallet();
@@ -83,7 +83,7 @@ export default function App() {
         />
         <TextField
           label="Transaction Block"
-          placeholder="Please input your transaction block BASE-64 encoding content."
+          placeholder="Please input your transaction block hex or base64 encoded."
           rows={7}
           multiline
           value={txContent}
@@ -113,7 +113,7 @@ export default function App() {
                   .then((tb) => {
                     tb.build({ client: iotaClient })
                       .then((res) => {
-                        setTxContent(toHEX(res));
+                        setTxContent(toHex(res));
                       })
                       .finally(() => setGenerating(false));
                   })
@@ -130,7 +130,18 @@ export default function App() {
             loading={proposing}
             onClick={async () => {
               try {
-                const transactionBlock = Transaction.from(fromHEX(txContent));
+                let decodedBytes: Uint8Array;
+                let inputContent = txContent.trim();
+                if (inputContent.startsWith('0x')) {
+                  inputContent = inputContent.slice(2);
+                }
+                const isHex = /^[0-9a-fA-F]+$/.test(inputContent.trim());
+                if (isHex && inputContent.length % 2 === 0) {
+                  decodedBytes = fromHex(inputContent);
+                } else {
+                  decodedBytes = fromBase64(txContent);
+                }
+                const transactionBlock = Transaction.from(decodedBytes);
                 console.log('🚀 ~ onClick={ ~ transactionBlock:', account, signAndExecuteTransaction);
 
                 if (!account || !signAndExecuteTransaction) {

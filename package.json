@@ -10,8 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@iota/dapp-kit": "^0.4.4",
-    "@iota/iota-sdk": "^1.0.1",
+    "@iota/dapp-kit": "^0.5.1",
+    "@iota/iota-sdk": "^1.5.0",
     "@iota/wallet-standard": "^0.2.8",
     "@msafe/iota-app-store": "^1.1.4",
     "@msafe/iota-utils": "^1.1.5",
