@@ -1,6 +1,6 @@
 import { useConnectWallet, useCurrentWallet, useDisconnectWallet, useIotaClient } from '@iota/dapp-kit';
 import { Transaction } from '@iota/iota-sdk/transactions';
-import { fromBase64, fromHex, toHex } from '@iota/iota-sdk/utils';
+import { fromHEX, toHEX, fromBase64 } from '@iota/iota-sdk/utils';
 import { SUI_COIN, buildCoinTransferTxb, isSameAddress } from '@msafe/iota-utils';
 import { MSafeWallet } from '@msafe/iota-wallet';
 import { Button, PageHeader, TextField, shortAddress } from '@msafe/msafe-ui';
@@ -10,13 +10,13 @@ import { useSnackbar } from 'notistack';
 import { useEffect, useMemo, useState } from 'react';
 import { CopyBlock } from 'react-code-blocks';
 const code = `import { Transaction } from '@iota/iota-sdk/transactions';
-import { toHex } from '@iota/iota-sdk/utils';
+import { toHEX } from '@iota/iota-sdk/utils';
 
 const tx = new Transaction();
 // Your build logic here
 const txBytes = tx.build();
 // Copy below txHex content to input
-const txHex = toHex(txBytes);`;
+const txHex = toHEX(txBytes);`;
 
 export default function App() {
   const { mutate: disconnect } = useDisconnectWallet();
@@ -113,7 +113,7 @@ export default function App() {
                   .then((tb) => {
                     tb.build({ client: iotaClient })
                       .then((res) => {
-                        setTxContent(toHex(res));
+                        setTxContent(toHEX(res));
                       })
                       .finally(() => setGenerating(false));
                   })
@@ -137,7 +137,7 @@ export default function App() {
                 }
                 const isHex = /^[0-9a-fA-F]+$/.test(inputContent.trim());
                 if (isHex && inputContent.length % 2 === 0) {
-                  decodedBytes = fromHex(inputContent);
+                  decodedBytes = fromHEX(inputContent);
                 } else {
                   decodedBytes = fromBase64(txContent);
                 }
