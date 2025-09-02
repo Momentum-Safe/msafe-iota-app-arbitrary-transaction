@@ -1,6 +1,6 @@
 import { useConnectWallet, useCurrentWallet, useDisconnectWallet, useIotaClient } from '@iota/dapp-kit';
 import { Transaction } from '@iota/iota-sdk/transactions';
-import { fromHEX, toHEX } from '@iota/iota-sdk/utils';
+import { fromHEX, toHEX, fromBase64 } from '@iota/iota-sdk/utils';
 import { SUI_COIN, buildCoinTransferTxb, isSameAddress } from '@msafe/iota-utils';
 import { MSafeWallet } from '@msafe/iota-wallet';
 import { Button, PageHeader, TextField, shortAddress } from '@msafe/msafe-ui';
@@ -83,7 +83,7 @@ export default function App() {
         />
         <TextField
           label="Transaction Block"
-          placeholder="Please input your transaction block BASE-64 encoding content."
+          placeholder="Please input your transaction block hex or base64 encoded."
           rows={7}
           multiline
           value={txContent}
@@ -130,7 +130,18 @@ export default function App() {
             loading={proposing}
             onClick={async () => {
               try {
-                const transactionBlock = Transaction.from(fromHEX(txContent));
+                let decodedBytes: Uint8Array;
+                let inputContent = txContent.trim();
+                if (inputContent.startsWith('0x')) {
+                  inputContent = inputContent.slice(2);
+                }
+                const isHex = /^[0-9a-fA-F]+$/.test(inputContent.trim());
+                if (isHex && inputContent.length % 2 === 0) {
+                  decodedBytes = fromHEX(inputContent);
+                } else {
+                  decodedBytes = fromBase64(txContent);
+                }
+                const transactionBlock = Transaction.from(decodedBytes);
                 console.log('🚀 ~ onClick={ ~ transactionBlock:', account, signAndExecuteTransaction);
 
                 if (!account || !signAndExecuteTransaction) {
