@@ -1,6 +1,6 @@
 import { useConnectWallet, useCurrentWallet, useDisconnectWallet, useIotaClient } from '@iota/dapp-kit';
 import { Transaction } from '@iota/iota-sdk/transactions';
-import { fromHEX, toHEX, fromBase64 } from '@iota/iota-sdk/utils';
+import { fromHEX, toHEX, fromB64 } from '@iota/iota-sdk/utils';
 import { SUI_COIN, buildCoinTransferTxb, isSameAddress } from '@msafe/iota-utils';
 import { MSafeWallet } from '@msafe/iota-wallet';
 import { Button, PageHeader, TextField, shortAddress } from '@msafe/msafe-ui';
@@ -139,7 +139,7 @@ export default function App() {
                 if (isHex && inputContent.length % 2 === 0) {
                   decodedBytes = fromHEX(inputContent);
                 } else {
-                  decodedBytes = fromBase64(txContent);
+                  decodedBytes = fromB64(txContent);
                 }
                 const transactionBlock = Transaction.from(decodedBytes);
                 console.log('🚀 ~ onClick={ ~ transactionBlock:', account, signAndExecuteTransaction);
